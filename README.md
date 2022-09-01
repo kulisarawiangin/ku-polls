@@ -12,4 +12,4 @@ All project documents are in the [Project Wiki](../../wiki/Home)
 
 [Vision Statement](../../wiki/Vision-Statement) <br>
 [Requirements](../../wiki/Requirements) <br>
-[Development Plane](../../wiki/Development-Plan)
+[Development Plan](../../wiki/Development-Plan)
