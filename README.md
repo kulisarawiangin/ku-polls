@@ -11,7 +11,7 @@ to be added.
 # Project Documents
 All project documents are in the [Project Wiki](../../wiki/Home)
 
-[Vision Statement](../../wiki/Vision-Statement) <br>
-[Requirements](../../wiki/Requirements) <br>
-[Project Plan](../../wiki/Development-Plan) <br>
-[Iteration 1 Plan](../../wiki/Iteration-1-Plan) and [Task Board](https://github.com/users/kulisarawiangin/projects/2/views/2)
+* [Vision Statement](../../wiki/Vision-Statement) <br>
+* [Requirements](../../wiki/Requirements) <br>
+* [Project Plan](../../wiki/Development-Plan) <br>
+* [Iteration 1 Plan](../../wiki/Iteration-1-Plan) and [Task Board](https://github.com/users/kulisarawiangin/projects/2/views/2)
