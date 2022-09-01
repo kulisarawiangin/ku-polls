@@ -11,4 +11,5 @@ This application is part of the Individual Software Process course at Kasetsart 
 All project documents are in the [Project Wiki](../../wiki/Home)
 
 [Vision Statement](../../wiki/Vision-Statement) <br>
-[Requirements](../../wiki/Requirements)
+[Requirements](../../wiki/Requirements) <br>
+[Development Plane](../../wiki/Development-Plan)
