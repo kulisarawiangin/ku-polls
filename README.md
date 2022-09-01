@@ -6,6 +6,7 @@ An application for conducting a poll or survey, written in Python using Django. 
 This application is part of the Individual Software Process course at Kasetsart University.
 
 # How to Install and Run
+to be added.
 
 # Project Documents
 All project documents are in the [Project Wiki](../../wiki/Home)
