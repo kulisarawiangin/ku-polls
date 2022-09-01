@@ -8,7 +8,7 @@ This application is part of the Individual Software Process course at Kasetsart 
 # How to Install and Run
 
 # Project Documents
-All project documents are in the [Project Wiki][../../wiki/Home]
+All project documents are in the [Project Wiki](../../wiki/Home)
 
 [Vision Statement](../../wiki/VisionStatement) <br>
 [Requirements](../../wiki/Requirements)
