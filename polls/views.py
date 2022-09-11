@@ -54,4 +54,9 @@ def vote(request, question_id):
         return HttpResponseRedirect(reverse('polls:results', args=(question_id,)))
 
 
-
+def vote_error(request, pk):
+    question = get_object_or_404(Question, pk=pk)
+    if not question.can_vote():
+        messages.error(request, "Can't vote this poll")
+        return redirect('polls:index')
+    return render(request, 'polls/detail.html', {'question': question})
