@@ -57,8 +57,6 @@ class QuestionModelTests(TestCase):
         self.assertIs(current_question.is_published(), True)
 
 
-
-
 class QuestionIndexViewTests(TestCase):
     def test_no_questions(self):
         """

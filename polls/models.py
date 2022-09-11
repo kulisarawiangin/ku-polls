@@ -9,22 +9,24 @@ class Question(models.Model):
     pub_date = models.DateTimeField('date published')
     end_date = models.DateTimeField('end_date')
 
+    @admin.display(
+        boolean=True,
+        ordering=['pub_date', 'end_date'],
+        description='Published recently?',
+    )
     def was_published_recently(self):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
-    @admin.display(
-        boolean=True,
-        ordering='pub_date',
-        description='Published recently?',
-    )
     def is_published(self):
         now = timezone.now()
         return self.pub_date <= now
 
     def can_vote(self):
         now = timezone.now()
-        return self.pub_date <= now <= self.end_date and self.is_published()
+        if self.end_date:
+            return self.is_published and now <= self.end_date
+        return self.is_published()
 
     def __str__(self):
         return self.question_text

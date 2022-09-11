@@ -1,4 +1,16 @@
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+  <title>Polls lists</title>
+</head>
+<body>
+  <h1>Polls list</h1>
+   <div class="poll_list" >
+
 <form action="{% url 'polls:vote' question.id %}" method="post">
+
 {% csrf_token %}
 <fieldset>
     <legend><h1>{{ question.question_text }}</h1></legend>
@@ -8,7 +20,8 @@
         <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
     {% endfor %}
 </fieldset>
-<input type="submit" value="Vote">
-</form>
-<a href="{% url 'polls:index' %}"> <button>Back to List of Polls</button>  </a>
+        <a href="{% url 'polls:index' %}"> <button>Back to List of Polls</button>  </a>
 
+<input type="submit" value="Vote">
+
+</form>
