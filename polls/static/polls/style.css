@@ -3,4 +3,26 @@ li a {
 }
 body {
     background: white url("ku.jpg") no-repeat;
+    background-size: auto;
+    background-position: center bottom;
+}
+
+button {
+    background: green;
+    color: white;
+}
+
+input {
+    background: green;
+    color: white;
+}
+
+h1 {
+    background: green;
+    color: white;
+    text-align: center;
+}
+.container{
+    background: white;
+    color: black;
 }
