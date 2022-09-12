@@ -47,21 +47,6 @@ class QuestionModelTests(TestCase):
         recent_question = Question(pub_date=time)
         self.assertIs(recent_question.was_published_recently(), True)
 
-    def test_is_published_with_present_date(self):
-        """
-        is_published() return True if present date
-        is on pub_date.
-        """
-        time = timezone.now()
-        current_question = Question(pub_date=time)
-        self.assertIs(current_question.is_published(), True)
-
-    def test_can_vote_before_pub_date(self):
-        """can_vote() return False  if vote before polls publish date"""
-        time = timezone.now() - datetime.timedelta(days=3)
-        present = Question(pub_date=time)
-        self.assertIs(present.can_vote(), False)
-
     def test_can_vote_during_pub_date(self):
         """can_vote() return True  if vote during polls publish date"""
         time = timezone.now() - datetime.timedelta(days=3)
@@ -71,8 +56,14 @@ class QuestionModelTests(TestCase):
     def test_can_vote_after_end_date(self):
         """can_vote() return False  if vote after polls end date"""
         time = timezone.now() - datetime.timedelta(days=3)
-        present = Question(pub_date=time, ent_date=timezone.now() - datetime.timedelta(days=1))
-        self.assertIs(present.can_vote(), False)
+        after = Question(pub_date=time, end_date=timezone.now() - datetime.timedelta(days=1))
+        self.assertIs(after.can_vote(), False)
+
+    def test_can_vote_as_end_date_time(self):
+        """can_vote() return False  if vote at same time polls end date"""
+        time = timezone.now() - datetime.timedelta(days=3)
+        equal = Question(pub_date=time, end_date=time)
+        self.assertIs(equal.can_vote(), False)
 
 
 class QuestionIndexViewTests(TestCase):
@@ -142,14 +133,27 @@ class QuestionDetailViewTests(TestCase):
         future_question = create_question(question_text='Future question.', start=5, end=10)
         url = reverse('polls:detail', args=(future_question.id,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
 
     def test_past_question(self):
         """
         The detail view of a question with a pub_date in the past
         displays the question's text.
         """
-        past_question = create_question(question_text='Past Question.',  start=-5, end=-2)
+        past_question = create_question(question_text='Past Question.',  start=-5, end=10)
         url = reverse('polls:detail', args=(past_question.id,))
         response = self.client.get(url)
         self.assertContains(response, past_question.question_text)
+
+
+class QuestionResultViewTests(TestCase):
+    def test_count_vote(self):
+        """application save the data correctly."""
+        question = create_question(question_text='are you 2nd year student?',  start=5, end=10)
+        question.choice_set.create(choice_text='yes', votes=1)
+        question.choice_set.create(choice_text='no', votes=0)
+        response = self.client.get(reverse('polls:results', args=(question.id,)))
+        yes_count = response.context.dicts[3]['question'].choice_set.get(pk=1).votes
+        no_count = response.context.dicts[3]['question'].choice_set.get(pk=2).votes
+        self.assertEqual(yes_count, 1)
+        self.assertEqual(no_count, 0)
