@@ -148,7 +148,7 @@ class QuestionDetailViewTests(TestCase):
 
 class QuestionResultViewTests(TestCase):
     def test_count_vote(self):
-        """application save the data correctly."""
+        """application save the data correctly. """
         question = create_question(question_text='are you 2nd year student?',  start=5, end=10)
         question.choice_set.create(choice_text='yes', votes=1)
         question.choice_set.create(choice_text='no', votes=0)
