@@ -7,22 +7,22 @@ body {
     background-position: center bottom;
 }
 
-button {
+button,input {
     background: green;
     color: white;
 }
-
-input {
-    background: green;
-    color: white;
-}
-
 h1 {
     background: green;
     color: white;
     text-align: center;
 }
+
 .container{
     background: white;
     color: black;
+}
+
+.messages{
+    background: white;
+    color: red;
 }
