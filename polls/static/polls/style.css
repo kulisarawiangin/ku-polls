@@ -1,6 +1,20 @@
 li a {
-    color: black;
+    color: green;
 }
 body {
-    background: white url("ku.jpg") no-repeat;
+    background: black url("ku.jpg") no-repeat;
+}
+button{
+    background: white;
+    color: black;
+}
+
+input {
+    background: white;
+    color: black;
+}
+h1 {
+    background: white;
+    color: black;
+    text-align: center;
 }

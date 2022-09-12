@@ -16,7 +16,7 @@ class QuestionAdmin(admin.ModelAdmin):
     ]
     inlines = [ChoiceInline]
     list_display = ('question_text', 'pub_date', 'was_published_recently', 'is_published', 'can_vote')
-    list_filter = ['pub_date']
+    list_filter = ['pub_date', 'end_date']
     search_fields = ['question_text']
 
 

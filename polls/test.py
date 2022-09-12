@@ -47,7 +47,7 @@ class QuestionModelTests(TestCase):
         recent_question = Question(pub_date=time)
         self.assertIs(recent_question.was_published_recently(), True)
 
-    def test_was_published_with_present_date(self):
+    def test_is_published_with_present_date(self):
         """
         is_published() return True if present date
         is on pub_date.
@@ -55,6 +55,24 @@ class QuestionModelTests(TestCase):
         time = timezone.now()
         current_question = Question(pub_date=time)
         self.assertIs(current_question.is_published(), True)
+
+    def test_can_vote_before_pub_date(self):
+        """can_vote() return False  if vote before polls publish date"""
+        time = timezone.now() - datetime.timedelta(days=3)
+        present = Question(pub_date=time)
+        self.assertIs(present.can_vote(), False)
+
+    def test_can_vote_during_pub_date(self):
+        """can_vote() return True  if vote during polls publish date"""
+        time = timezone.now() - datetime.timedelta(days=3)
+        present = Question(pub_date=time, end_date=timezone.now() + datetime.timedelta(days=3))
+        self.assertIs(present.can_vote(), True)
+
+    def test_can_vote_after_end_date(self):
+        """can_vote() return False  if vote after polls end date"""
+        time = timezone.now() - datetime.timedelta(days=3)
+        present = Question(pub_date=time, ent_date=timezone.now() - datetime.timedelta(days=1))
+        self.assertIs(present.can_vote(), False)
 
 
 class QuestionIndexViewTests(TestCase):
