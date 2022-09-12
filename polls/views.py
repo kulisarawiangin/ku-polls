@@ -33,7 +33,7 @@ class DetailView(generic.DetailView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request,  *args, **kwargs):
         """Check if the question is in polling period.
         Arguments:
             request
@@ -41,11 +41,14 @@ class DetailView(generic.DetailView):
             httpresponse
         """
         question = get_object_or_404(Question, pk=kwargs['pk'])
-        if not question.can_vote():
-            messages.error(
-                request, "This poll is not in polling period.")
+        if not question.is_published():
+            messages.error(request, 'This poll is not publish.')
             return HttpResponseRedirect(reverse('polls:index'))
-        return super().get(request, *args, **kwargs)
+        elif not question.can_vote():
+            messages.error(request, 'This poll is over.')
+            return HttpResponseRedirect(reverse('polls:index'))
+        else:
+            return render(request, 'polls/detail.html', {'question': question, })
 
 
 class ResultsView(generic.DetailView):

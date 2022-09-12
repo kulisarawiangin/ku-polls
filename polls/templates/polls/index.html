@@ -1,9 +1,15 @@
 {% load static %}
 <html>
-<meta charset="utf-8">
   <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
-  <h1>KU Polls lists</h1>
+  <h1>KU Polls Lists</h1>
+  {% if messages %}
+<ul class="messages">
+    {% for msg in messages %}
+        <li class="{{msg.tags}}">{{ msg }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 <div class="container">
           {% if latest_question_list %}
         <ul >

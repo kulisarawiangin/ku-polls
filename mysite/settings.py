@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY', default='SECRET_PASSWORD')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='127.0.0.1')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='')
 
 
 # Application definition
@@ -102,7 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = config('TIME_ZONE', default='UTC')
+TIME_ZONE = config('TIME_ZONE', default='Asia/Bangkok')
 
 USE_I18N = True
 

@@ -1,8 +1,7 @@
 {% load static %}
 <html>
-<meta charset="utf-8">
   <link rel="stylesheet" href="{% static 'polls/style.css' %}">
-  <h1>KU Polls list</h1>
+  <h1>KU Polls List</h1>
 
 <form action="{% url 'polls:vote' question.id %}" method="post">
 {% csrf_token %}

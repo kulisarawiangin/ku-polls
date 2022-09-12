@@ -1,25 +1,29 @@
 li a {
-    color: blue;
+    color: black;
 }
 
 body {
-    background: white url("images/ku.jpg") no-repeat;
+    background: white url("ku.jpg") no-repeat;
     background-size: auto;
     background-position: center bottom;
 }
 
 button {
-    background: black;
-    color: white;
+    background: green;
+    color: black;
 }
 
 input {
-    background: black;
-    color: white;
+    background: green;
+    color: black;
 }
 
 h1 {
-    background: black;
+    background: green;
     color: white;
     text-align: center;
+}
+.container{
+    background: white;
+    color: black;
 }
