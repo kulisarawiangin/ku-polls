@@ -1,9 +1,10 @@
 {% load static %}
+<html>
+<meta charset="utf-8">
   <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
-
   <h1>KU Polls lists</h1>
-  <div class="poll_list" >
+<div class="container">
           {% if latest_question_list %}
         <ul >
         {% for question in latest_question_list %}
@@ -20,6 +21,5 @@
     {% else %}
         <p>No polls are available.</p>
     {% endif %}
-
 </div>
-
+</html>

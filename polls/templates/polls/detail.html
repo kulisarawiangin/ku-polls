@@ -1,11 +1,13 @@
 {% load static %}
+<html>
+<meta charset="utf-8">
   <link rel="stylesheet" href="{% static 'polls/style.css' %}">
   <h1>KU Polls list</h1>
-   <div class="poll_list" >
 
 <form action="{% url 'polls:vote' question.id %}" method="post">
-
 {% csrf_token %}
+    <div class="container">
+
 <fieldset>
     <legend><h1>{{ question.question_text }}</h1></legend>
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
@@ -15,8 +17,7 @@
     {% endfor %}
 </fieldset>
 
-    <a href="{% url 'polls:index' %}"><button type="button">Back to List of Polls</button></a>
-    <input type="submit" value="Vote">
-
+     <input type="submit" value="Vote"> | <a href="{% url 'polls:index' %}"><button type="button">Back to List of Polls</button></a>
+</div>
 </form>
-   </div>
+    </html>
