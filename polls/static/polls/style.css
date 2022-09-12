@@ -7,12 +7,7 @@ body {
     background-position: center bottom;
 }
 
-button {
-    background: green;
-    color: white;
-}
-
-input {
+button,input {
     background: green;
     color: white;
 }
@@ -25,4 +20,8 @@ h1 {
 .container{
     background: white;
     color: black;
+}
+.messages{
+    background: white;
+    color: red;
 }
