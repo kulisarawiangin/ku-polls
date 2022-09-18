@@ -1,4 +1,6 @@
 li a {
+    font-family:Arial;
+    font-size: 20px;
     color: black;
 }
 
@@ -9,22 +11,47 @@ body {
 }
 
 button,input {
+    font-family:Arial;
+    font-size: 18px;
     background: green;
     color: white;
 }
 h1 {
+    font-family:Arial;
+    font-size: 20px;
     background: green;
     color: white;
     text-align: center;
 }
 
 .container{
+    font-family:Arial;
+    font-size: 20px;
     background: white;
     color: black;
 }
 
 .messages{
+    font-family:Arial;
+    font-size: 18px;
     background: white;
     color: red;
 }
+table, th, td {
+    border-collapse: collapse;
+    font-family:Arial;
+    font-size: 18px;
+    color: black;
+}
+p {
+    color: red;
+    font-family: Arial;
+    font-size: 18px;
+}
 
+.results{
+    font-family:Arial;
+    font-size: 18px;
+    background: white;
+    color: black;
+}

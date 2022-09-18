@@ -1,8 +1,7 @@
 {% load static %}
-<html>
   <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
-  <h1>KU Polls Lists</h1>
+  <legend><h1>KU Polls Lists</h1></legend>
   {% if messages %}
 <ul class="messages">
     {% for msg in messages %}
@@ -10,22 +9,23 @@
     {% endfor %}
 </ul>
 {% endif %}
-<div class="container">
+<table  cellpadding=10 >
           {% if latest_question_list %}
-        <ul >
+        <ul>
         {% for question in latest_question_list %}
             {% if question.is_published %}
-            <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
+            <tr>
+             <td><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
                 {% if question.can_vote %}
-                    <a href="{% url 'polls:detail' question.id %}"><button type="button"> vote </button></a>
+                    <td> <a href="{% url 'polls:detail' question.id %}"><button type="button"> vote </button></a>
+                <td></td>
                 {% endif %}
-                <a href="{% url 'polls:results' question.id %}"> <button type="button"> result </button> </a>
-            </li>
+                <td><a href="{% url 'polls:results' question.id %}"> <button type="button"> result </button> </a>
             {% endif %}
         {% endfor %}
+        </tr>
         </ul>
+</table>
     {% else %}
         <p>No polls are available.</p>
     {% endif %}
-</div>
-</html>
