@@ -58,13 +58,34 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
-    def get(self, request, pk):
-        """Return result page if can_vote method returns True. If not then redirect to results page."""
-        question = get_object_or_404(Question, pk=pk)
-        if not question.is_published():
-            messages.error(request, 'This poll is not publish.')
-            return HttpResponseRedirect(reverse('polls:index'))
-        else:
-            return render(request, 'polls/results.html', {'question': question})
+    def get_queryset(self):
+        """Excludes any questions that aren't published yet."""
+        published_id_list = [q.id for q in Question.objects.all() if q.is_published()]
+        return Question.objects.filter(id__in=published_id_list)
 
 
+@login_required
+def vote(request, question_id):
+    """Add vote to choice of the current question."""
+    user = request.user
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        selected_choice = question.choice_set.get(pk=request.POST['choice'])
+    except (KeyError, Choice.DoesNotExist):
+        return render(request, 'polls/detail.html', {
+            'question': question,
+            'error_message': "You didn't select a choice.",
+        })
+    else:
+        try:
+            vote_select = Vote.objects.filter(user=user)
+            for select in vote_select:
+                if select.question == question:
+                    select.choice = selected_choice
+                    select.save()
+                    break
+        except:
+            new_vote = Vote.objects.create(user=user, choice=selected_choice)
+            new_vote.save()
+
+    return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
