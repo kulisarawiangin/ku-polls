@@ -1,5 +1,4 @@
 {% load static %}
-
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 <legend><h1>{{ question.question_text }}</h1></legend>
 <div class="results">
@@ -15,7 +14,5 @@
     {% endfor %}
 </table><br>
     </div>
-
- <a href="{% url 'polls:detail' question.id %}"><button type="button"> Vote Again</button></a>
     <a href="{% url 'polls:index' %}"><button type="button">Back to List of Polls</button></a>
 

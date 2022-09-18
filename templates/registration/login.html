@@ -1,5 +1,9 @@
-<html>
-<body>
+
+{% if user.is_authenticated %}
+   Welcome back, {{ user.username }}
+{% else %}
+   Please <a href="{% url 'login' %}">Login</a>
+{% endif %}
 <h2>Login</h2>
 <form method="post">
   {% csrf_token %}
@@ -9,9 +13,6 @@
   </p>
   <input type="hidden" name="next" value="{{next}}"/>
  </form>
-{# If you have a password_reset template, then add here #}
 <p>
 <a href="{% url 'password_reset' %}">Forgot password?</a>
 </p>
-</body>
-</html>
