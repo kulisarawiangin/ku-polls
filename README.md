@@ -24,13 +24,30 @@ install python in your computer
   pip install -r requirements.txt
  ```
  
- 4. Create file name .env to configuration
+ 4. Create file name .env to configuration as .env in git repository
  
  5. run server by type this command in your terminal.
- 
  ``` 
  python manage.py runserver
  ```
+ 6. You can use website at 
+ ``` 
+ http://localhost:8000
+ ``` 
+This web application has two link ```/polls``` and ```/admin``` 
+but the main page is ```/polls```.
+
+Admin  provide by initial data
+| Username  | Password  |
+|-----------|-----------|
+|   Kulisara   | P@ssw0rd |
+
+User provide by initial data
+
+| Username  | Password  |
+|-----------|-----------|
+|   jay   | jay12345 |
+|   harry   | harry12345 |
 
 # Project Documents
 All project documents are in the [Project Wiki](../../wiki/Home)
@@ -41,3 +58,4 @@ All project documents are in the [Project Wiki](../../wiki/Home)
 * [Iteration 1 Plan](../../wiki/Iteration-1-Plan) and [Task Board](https://github.com/users/kulisarawiangin/projects/2/views/2)
 * [Iteration 2 Plan](../../wiki/Iteration-2-Plan) and [Task Bord](https://github.com/users/kulisarawiangin/projects/4/views/2)
 * [Iteration 3 Plan](../../wiki/Iteration-3-Plan) and [Task Bord](https://github.com/users/kulisarawiangin/projects/5/views/2?layout=board)
+
