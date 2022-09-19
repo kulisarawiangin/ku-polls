@@ -4,7 +4,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
 from django.contrib import messages
-from .models import Choice, Question
+from .models import Choice, Question, Vote
+from django.contrib.auth.decorators import login_required
 
 
 class IndexView(generic.ListView):
@@ -40,7 +41,10 @@ class DetailView(generic.DetailView):
         Returns:
             httpresponse
         """
+        if request.user.is_anonymous:
+            return redirect(to='http://127.0.0.1:8000/accounts/login')
         question = get_object_or_404(Question, pk=kwargs['pk'])
+        user = request.user
         if not question.is_published():
             messages.error(request, 'This poll is not publish.')
             return HttpResponseRedirect(reverse('polls:index'))
@@ -48,7 +52,12 @@ class DetailView(generic.DetailView):
             messages.error(request, 'This poll is over.')
             return HttpResponseRedirect(reverse('polls:index'))
         else:
-            return render(request, 'polls/detail.html', {'question': question, })
+            choice = ""
+            user_vote = Vote.objects.filter(user=user)
+            for select in user_vote:
+                if select.question == question:
+                    choice = select.choice.choice_text
+            return render(request, 'polls/detail.html', {'question': question, 'check': choice, })
 
 
 class ResultsView(generic.DetailView):
@@ -56,9 +65,26 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
+    def get(self, request,  *args, **kwargs):
+        """Check if the question is in polling period if not return result.
+        Arguments:
+            request
+        Returns:
+            httpresponse
+        """
+        question = get_object_or_404(Question, pk=kwargs['pk'])
+        if not question.is_published():
+            messages.error(request, 'This poll is not publish.')
+            return HttpResponseRedirect(reverse('polls:index'))
+        else:
+            return render(request, 'polls/results.html', {'question': question})
 
+
+
+@login_required
 def vote(request, question_id):
     """Vote for voting button."""
+    user = request.user
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
@@ -68,13 +94,12 @@ def vote(request, question_id):
             'error_message': "You didn't select a choice.",
         })
     else:
-        if question.can_vote():
-            selected_choice.votes += 1
-            selected_choice.save()
-            return HttpResponseRedirect(reverse('polls:results', args=(question_id,)))
-        else:
-            messages.error(request, "Can't vote this poll")
-            return HttpResponseRedirect(reverse('polls:index'))
-
-
-
+        vote = Vote.objects.filter(user=user)
+        for select in vote:
+            if select.question == question:
+                select.choice = selected_choice
+                select.save()
+                return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        new_vote = Vote.objects.create(user=user, choice=selected_choice)
+        new_vote.save()
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
