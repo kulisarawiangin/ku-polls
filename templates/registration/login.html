@@ -1,17 +1,26 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+<h1>KU Login</h1>
 <html>
 <body>
-<h2>Login</h2>
-<form method="post">
+{% if user.is_authenticated %}
+    Welcome back, {{ user.username }}
+{% else %}
+<h2>Please <a href="{% url 'login'%}?next={{request.path}}">Login</a></h2>
+{% endif %}
+<form method="POST">
   {% csrf_token %}
-  {{ form.as_p }}
-  <p>
+  <table style="padding: 2ex;">
+  {{ form.as_table }}
+  </table>
   <button type="submit">Login</button>
-  </p>
-  <input type="hidden" name="next" value="{{next}}"/>
- </form>
+  <input type="hidden" name="next" value="{{next}}" />
+</form>
 {# If you have a password_reset template, then add here #}
 <p>
-<a href="{% url 'password_reset' %}">Forgot password?</a>
+<h2><a href="{% url 'password_reset' %}">Forgot password?</a></h2>
 </p>
 </body>
 </html>
+

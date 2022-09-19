@@ -2,7 +2,14 @@
 <html>
   <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
-  <h1>KU Polls Lists</h1>
+  <legend><h1>KU Polls Lists</h1></legend>
+  {% if user.is_authenticated %}
+    Welcome back, {{ user.username }}
+{% else %}
+
+<h2>Please <a href="http://127.0.0.1:8000/accounts/login"><Button>login</Button></a></h2>
+{% endif %}
+
   {% if messages %}
 <ul class="messages">
     {% for msg in messages %}
@@ -10,22 +17,28 @@
     {% endfor %}
 </ul>
 {% endif %}
-<div class="container">
-          {% if latest_question_list %}
-        <ul >
-        {% for question in latest_question_list %}
-            {% if question.is_published %}
-            <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
-                {% if question.can_vote %}
-                    <a href="{% url 'polls:detail' question.id %}"><button type="button"> vote </button></a>
-                {% endif %}
-                <a href="{% url 'polls:results' question.id %}"> <button type="button"> result </button> </a>
-            </li>
+<table cellpadding=10>
+{% if latest_question_list %}
+    <ul>
+    {% for question in latest_question_list %}
+        {% if question.is_published %}
+        <tr>
+            {% if question.can_vote %}
+
+            <td><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></td>
+            <td><a href="{% url 'polls:detail' question.id %}"><Button>Vote</button></a></td>
+            {% else %}
+                <td><a href="{% url 'polls:results' question.id %}">{{ question.question_text }}</a></td>
+                <td> </td>
             {% endif %}
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No polls are available.</p>
-    {% endif %}
-</div>
-</html>
+        <td><a href="{% url 'polls:results' question.id %}"><Button>Result</button></a></td>
+        {% endif %}
+    {% endfor %}
+</tr>
+    </ul>
+</table>
+  <h2><a href="http://127.0.0.1:8000/accounts/logout"><Button>logout</Button></a></h2> <br />
+<br />
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
