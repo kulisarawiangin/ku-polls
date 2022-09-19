@@ -58,15 +58,24 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
-    def get_queryset(self):
-        """Excludes any questions that aren't published yet."""
-        published_id_list = [q.id for q in Question.objects.all() if q.is_published()]
-        return Question.objects.filter(id__in=published_id_list)
+    def get(self, request,  *args, **kwargs):
+        """Check if the question is in polling period if not return result page.
+        Arguments:
+            request
+        Returns:
+            httpresponse
+        """
+        question = get_object_or_404(Question, pk=kwargs['pk'])
+        if not question.is_published():
+            messages.error(request, 'This poll is not publish.')
+            return HttpResponseRedirect(reverse('polls:index'))
+        else:
+            return render(request, 'polls/results.html', {'question': question})
 
 
 @login_required
 def vote(request, question_id):
-    """Add vote to choice of the current question."""
+    """Add a vote to choice that user select."""
     user = request.user
     question = get_object_or_404(Question, pk=question_id)
     try:
@@ -77,15 +86,12 @@ def vote(request, question_id):
             'error_message': "You didn't select a choice.",
         })
     else:
-        try:
-            vote_select = Vote.objects.filter(user=user)
-            for select in vote_select:
-                if select.question == question:
-                    select.choice = selected_choice
-                    select.save()
-                    break
-        except:
-            new_vote = Vote.objects.create(user=user, choice=selected_choice)
-            new_vote.save()
-
-    return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        vote_select = Vote.objects.filter(user=user)
+        for user_select in vote_select:
+            if user_select.question == question:
+                user_select.choice = selected_choice
+                user_select.save()
+                return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        new_vote = Vote.objects.create(user=user, choice=selected_choice)
+        new_vote.save()
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
