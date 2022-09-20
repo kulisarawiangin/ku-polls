@@ -78,12 +78,12 @@ class ResultsView(generic.DetailView):
         try:
             question = get_object_or_404(Question, pk=kwargs['pk'])
         except (KeyError, Question.DoesNotExist):
-            messages.error(request, f"This poll does not exists.")
+            messages.error(request, "This poll does not exists.")
             return HttpResponseRedirect(reverse('polls:index'))
         if question.is_published():
             return render(request, 'polls/results.html', {"question": question})
         else:
-            messages.error(request, f"This poll result is not available.")
+            messages.error(request, "This poll result is not available.")
             return HttpResponseRedirect(reverse('polls:index'))
 
 
