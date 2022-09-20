@@ -1,5 +1,7 @@
 li a {
     color: black;
+    font-family: Arial;
+    font-size: 18px;
 }
 
 body {
@@ -8,23 +10,49 @@ body {
     background-position: center bottom;
 }
 
-button,input {
-    background: green;
-    color: white;
+button, input{
+    background: white;
+    color: black;
+    font-family: Arial;
+    font-size: 18px;
 }
 h1 {
     background: green;
     color: white;
     text-align: center;
+    font-family: Arial;
+    font-size: 20px;
 }
 
 .container{
     background: white;
     color: black;
+    font-family: Arial;
+    font-size: 18px;
 }
 
 .messages{
+    font-family: Arial;
+    font-size: 18px;
     background: white;
     color: red;
+}
+table, th, td{
+    font-family: Arial;
+    font-size: 20px;
+    color: black;
+    background: white;
+    border-collapse: collapse;
+}
+.login{
+    color: black;
+    font-family: Arial;
+    font-size: 18px;
+}
+
+h2 {
+    color: black;
+    font-family: Arial;
+    font-size: 20px;
 }
 

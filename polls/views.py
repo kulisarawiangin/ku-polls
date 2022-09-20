@@ -1,10 +1,12 @@
+"""This module contains the view of site page of the KU Polls application."""
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.utils import timezone
 from django.views import generic
+from .models import Question, Choice, Vote
+from django.utils import timezone
 from django.contrib import messages
-from .models import Choice, Question
+from django.contrib.auth.decorators import login_required
 
 
 class IndexView(generic.ListView):
@@ -33,22 +35,32 @@ class DetailView(generic.DetailView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
 
-    def get(self, request,  *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         """Check if the question is in polling period.
         Arguments:
             request
         Returns:
             httpresponse
         """
-        question = get_object_or_404(Question, pk=kwargs['pk'])
-        if not question.is_published():
-            messages.error(request, 'This poll is not publish.')
+        try:
+            question = get_object_or_404(Question, pk=kwargs['pk'])
+        except Question.DoesNotExist:
+            messages.error(request, "This poll does not exists.")
             return HttpResponseRedirect(reverse('polls:index'))
-        elif not question.can_vote():
+        if not question.is_published():
+            messages.error(request, "This poll is not publish.")
+            return HttpResponseRedirect(reverse('polls:index'))
+        try:
+            vote = Vote.objects.get(user=request.user,
+                                    choice__in=question.choice_set.all())
+            check = vote.choice.choice_text
+        except (Vote.DoesNotExist, TypeError):
+            check = ""
+        if question.can_vote():
+            return render(request, 'polls/detail.html', {"question": question, "check": check})
+        else:
             messages.error(request, 'This poll is over.')
             return HttpResponseRedirect(reverse('polls:index'))
-        else:
-            return render(request, 'polls/detail.html', {'question': question, })
 
 
 class ResultsView(generic.DetailView):
@@ -56,10 +68,30 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
+    def get(self, request, *args, **kwargs):
+        """Check the result.
+        Arguments:
+            request
+        Returns:
+            httpresponse
+        """
+        try:
+            question = get_object_or_404(Question, pk=kwargs['pk'])
+        except (KeyError, Question.DoesNotExist):
+            messages.error(request, f"This poll does not exists.")
+            return HttpResponseRedirect(reverse('polls:index'))
+        if question.is_published():
+            return render(request, 'polls/results.html', {"question": question})
+        else:
+            messages.error(request, f"This poll result is not available.")
+            return HttpResponseRedirect(reverse('polls:index'))
 
+
+@login_required
 def vote(request, question_id):
     """Vote for voting button."""
     question = get_object_or_404(Question, pk=question_id)
+    user = request.user
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
@@ -68,13 +100,10 @@ def vote(request, question_id):
             'error_message': "You didn't select a choice.",
         })
     else:
-        if question.can_vote():
-            selected_choice.votes += 1
-            selected_choice.save()
-            return HttpResponseRedirect(reverse('polls:results', args=(question_id,)))
-        else:
-            messages.error(request, "Can't vote this poll")
-            return HttpResponseRedirect(reverse('polls:index'))
-
-
-
+        try:
+            user_vote = Vote.objects.get(user=user, choice__question=question)
+            user_vote.choice = selected_choice
+            user_vote.save()
+        except Vote.DoesNotExist:
+            Vote.objects.create(user=user, choice=selected_choice).save()
+        return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))

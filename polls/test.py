@@ -1,10 +1,9 @@
 import datetime
-
 from django.test import TestCase
 from django.utils import timezone
-
-from .models import Question
+from polls.models import Question
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 def create_question(question_text, start, end):
@@ -40,12 +39,28 @@ class QuestionModelTests(TestCase):
 
     def test_was_published_recently_with_recent_question(self):
         """
-        was_published_recently() returns True for questions whose pub_date
+        was_published_recently() returns True if questions whose pub_date
         is within the last day.
         """
         time = timezone.now() - datetime.timedelta(hours=23, minutes=59, seconds=59)
         recent_question = Question(pub_date=time)
         self.assertIs(recent_question.was_published_recently(), True)
+
+    def test_is_published_with_future_question(self):
+        """
+        is_published() return False if questions are not publish.
+        """
+        time = timezone.now() + datetime.timedelta(days=1)
+        future_question = Question(pub_date=time)
+        self.assertFalse(future_question.is_published())
+
+    def test_is_published_with_past_question(self):
+        """
+        is_published() return True if questions are already publish.
+        """
+        time = timezone.now() - datetime.timedelta(days=1)
+        past_question = Question(pub_date=time)
+        self.assertTrue(past_question.is_published())
 
     def test_can_vote_during_pub_date(self):
         """can_vote() return True  if vote during polls publish date"""
@@ -140,20 +155,36 @@ class QuestionDetailViewTests(TestCase):
         The detail view of a question with a pub_date in the past
         displays the question's text.
         """
-        past_question = create_question(question_text='Past Question.',  start=-5, end=10)
+        past_question = create_question(question_text='Past Question.', start=-5, end=10)
         url = reverse('polls:detail', args=(past_question.id,))
         response = self.client.get(url)
         self.assertContains(response, past_question.question_text)
 
 
-class QuestionResultViewTests(TestCase):
-    def test_count_vote(self):
-        """application save the data correctly. """
-        question = create_question(question_text='are you 2nd year student?',  start=5, end=10)
-        question.choice_set.create(choice_text='yes', votes=1)
-        question.choice_set.create(choice_text='no', votes=0)
-        response = self.client.get(reverse('polls:results', args=(question.id,)))
-        yes_count = response.context.dicts[3]['question'].choice_set.get(pk=1).votes
-        no_count = response.context.dicts[3]['question'].choice_set.get(pk=2).votes
-        self.assertEqual(yes_count, 1)
-        self.assertEqual(no_count, 0)
+class VoteModelTest(TestCase):
+    def setUp(self):
+        self.username = "testuser"
+        self.password = "test"
+        self.user = User.objects.create_user(
+            username=self.username,
+            password=self.password,
+            email="testuser@ku.th"
+        )
+        self.user.save()
+        question = create_question("test question", start=5, end=10)
+        question.save()
+        self.question = question
+
+    def test_unauthenticated_user_cant_vote(self):
+        """user must be authenticated(login) before vote"""
+        vote_url = reverse('polls:vote', args=[self.question.id])
+        response = self.client.get(vote_url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_user_must_authenticated_before_vote(self):
+        """authenticated user can vote."""
+        self.client.login(username="testuser", password="test")
+        vote_url = reverse('polls:vote', args=[self.question.id])
+        response = self.client.get(vote_url)
+        self.assertEqual(response.status_code, 200)
+
