@@ -22,6 +22,9 @@
                   </div>
 
 </form>
-<a href="{% url 'polls:index' %}"><button type="button">Back to List of Polls</button></a></div>
+    <a href="{% url 'polls:results' question.id %}"><Button>Result</button></a><br>
+<a href="{% url 'polls:index' %}"><button type="button">Back to List of Polls</button></a>
+  </div>
+
 
     </html>
