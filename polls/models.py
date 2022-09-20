@@ -1,3 +1,4 @@
+"""This module contains  Question, Choice and Vote models for the Polls app."""
 import datetime
 from django.contrib import admin
 from django.db import models
@@ -34,6 +35,7 @@ class Question(models.Model):
         return self.is_published()
 
     def __str__(self):
+        """return question string."""
         return self.question_text
 
     def get_voted_choice(self, user):
@@ -49,8 +51,8 @@ class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
 
-    @property
     def votes(self):
+        """count total number of this choice."""
         return Vote.objects.filter(choice=self).count()
 
     def __str__(self):
@@ -65,4 +67,5 @@ class Vote(models.Model):
 
     @property
     def question(self):
+        """Question of this choice."""
         return self.choice.question
