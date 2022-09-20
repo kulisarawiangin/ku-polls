@@ -43,12 +43,12 @@ class DetailView(generic.DetailView):
             httpresponse
         """
         try:
-            question = get_object_or_404(Question, pk=kwargs["pk"])
+            question = get_object_or_404(Question, pk=kwargs['pk'])
         except Question.DoesNotExist:
-            messages.error(request, f"This poll does not exists.")
+            messages.error(request, "This poll does not exists.")
             return HttpResponseRedirect(reverse('polls:index'))
         if not question.is_published():
-            messages.error(request, 'This poll is not publish.')
+            messages.error(request, "This poll is not publish.")
             return HttpResponseRedirect(reverse('polls:index'))
         try:
             vote = Vote.objects.get(user=request.user,
