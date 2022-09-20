@@ -51,9 +51,8 @@ class DetailView(generic.DetailView):
             messages.error(request, "This poll is not publish.")
             return HttpResponseRedirect(reverse('polls:index'))
         try:
-            vote = Vote.objects.get(user=request.user,
-                                    choice__in=question.choice_set.all())
-            check = vote.choice.choice_text
+            current_vote = Vote.objects.get(user=request.user, choice__in=question.choice_set.all())
+            check = current_vote.choice.choice_text
         except (Vote.DoesNotExist, TypeError):
             check = ""
         if question.can_vote():
@@ -101,9 +100,9 @@ def vote(request, question_id):
         })
     else:
         try:
-            user_vote = Vote.objects.get(user=user, choice__question=question)
-            user_vote.choice = selected_choice
-            user_vote.save()
+            current_vote = Vote.objects.get(user=user, choice__question=question_id)
         except Vote.DoesNotExist:
-            Vote.objects.create(user=user, choice=selected_choice).save()
-        return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
+            current_vote = Vote.objects.create(user=user, choice=selected_choice)
+        current_vote.choice = selected_choice
+        current_vote.save()
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
