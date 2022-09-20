@@ -32,7 +32,7 @@ install python in your computer
  ```
  6. You can use website at 
  ``` 
- http://localhost:8000
+ localhost:8000/ or http://127.0.0.1:8000/
  ``` 
 This web application has two link ```/polls``` and ```/admin``` 
 but the main page is ```/polls```.
