@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+
 class Question(models.Model):
     """Django model Object for Question."""
     question_text = models.CharField(max_length=200)
@@ -12,7 +13,7 @@ class Question(models.Model):
 
     @admin.display(
         boolean=True,
-        ordering=['pub_date', 'end_date'],
+        ordering='pub_date',
         description='Published recently?',
     )
     def was_published_recently(self):
