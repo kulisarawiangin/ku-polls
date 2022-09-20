@@ -51,6 +51,7 @@ class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
 
+    @property
     def votes(self):
         """count total number of this choice."""
         return Vote.objects.filter(choice=self).count()
