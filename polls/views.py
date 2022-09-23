@@ -51,12 +51,15 @@ class DetailView(generic.DetailView):
             messages.error(request, "This poll is not publish.")
             return HttpResponseRedirect(reverse('polls:index'))
         try:
-            current_vote = Vote.objects.get(user=request.user, choice__in=question.choice_set.all())
+            current_vote = Vote.objects.get(user=request.user,
+                                            choice__in=question.
+                                            choice_set.all())
             check = current_vote.choice.choice_text
         except (Vote.DoesNotExist, TypeError):
             check = ""
         if question.can_vote():
-            return render(request, 'polls/detail.html', {"question": question, "check": check})
+            return render(request, 'polls/detail.html',
+                          {"question": question, "check": check})
         else:
             messages.error(request, 'This poll is over.')
             return HttpResponseRedirect(reverse('polls:index'))
@@ -80,7 +83,8 @@ class ResultsView(generic.DetailView):
             messages.error(request, "This poll does not exists.")
             return HttpResponseRedirect(reverse('polls:index'))
         if question.is_published():
-            return render(request, 'polls/results.html', {"question": question})
+            return render(request, 'polls/results.html',
+                          {"question": question})
         else:
             messages.error(request, "This poll result is not available.")
             return HttpResponseRedirect(reverse('polls:index'))
@@ -100,9 +104,12 @@ def vote(request, question_id):
         })
     else:
         try:
-            current_vote = Vote.objects.get(user=user, choice__question=question_id)
+            current_vote = Vote.objects.get(user=user,
+                                            choice__question=question_id)
         except Vote.DoesNotExist:
-            current_vote = Vote.objects.create(user=user, choice=selected_choice)
+            current_vote = Vote.objects.create(user=user,
+                                               choice=selected_choice)
         current_vote.choice = selected_choice
         current_vote.save()
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        return HttpResponseRedirect(reverse
+                                    ('polls:results', args=(question.id,)))

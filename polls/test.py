@@ -42,7 +42,8 @@ class QuestionModelTests(TestCase):
         was_published_recently() returns True if questions whose pub_date
         is within the last day.
         """
-        time = timezone.now() - datetime.timedelta(hours=23, minutes=59, seconds=59)
+        time = timezone.now() - datetime.timedelta(hours=23, minutes=59,
+                                                   seconds=59)
         recent_question = Question(pub_date=time)
         self.assertIs(recent_question.was_published_recently(), True)
 
@@ -65,13 +66,16 @@ class QuestionModelTests(TestCase):
     def test_can_vote_during_pub_date(self):
         """can_vote() return True  if vote during polls publish date"""
         time = timezone.now() - datetime.timedelta(days=3)
-        present = Question(pub_date=time, end_date=timezone.now() + datetime.timedelta(days=3))
+        present = Question(pub_date=time,
+                           end_date=timezone.now() + datetime.
+                           timedelta(days=3))
         self.assertIs(present.can_vote(), True)
 
     def test_can_vote_after_end_date(self):
         """can_vote() return False  if vote after polls end date"""
         time = timezone.now() - datetime.timedelta(days=3)
-        after = Question(pub_date=time, end_date=timezone.now() - datetime.timedelta(days=1))
+        after = Question(pub_date=time,
+                         end_date=timezone.now() - datetime.timedelta(days=1))
         self.assertIs(after.can_vote(), False)
 
     def test_can_vote_as_end_date_time(self):
@@ -96,7 +100,8 @@ class QuestionIndexViewTests(TestCase):
         Questions with a pub_date in the past are displayed on the
         index page.
         """
-        question = create_question(question_text="Past question.", start=-5, end=-2)
+        question = create_question(question_text="Past question.",
+                                   start=-5, end=-2)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
@@ -118,8 +123,10 @@ class QuestionIndexViewTests(TestCase):
         Even if both past and future questions exist, only past questions
         are displayed.
         """
-        question = create_question(question_text="Past question.",start=-30, end=-25)
-        create_question(question_text="Future question.", start=30, end=35)
+        question = create_question(question_text="Past question.",
+                                   start=-30, end=-25)
+        create_question(question_text="Future question.",
+                        start=30, end=35)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
@@ -130,8 +137,10 @@ class QuestionIndexViewTests(TestCase):
         """
         The questions index page may display multiple questions.
         """
-        question1 = create_question(question_text="Past question 1.",  start=-30, end=-25)
-        question2 = create_question(question_text="Past question 2.", start=-5, end=-3)
+        question1 = create_question(question_text="Past question 1.",
+                                    start=-30, end=-25)
+        question2 = create_question(question_text="Past question 2.",
+                                    start=-5, end=-3)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
@@ -145,7 +154,8 @@ class QuestionDetailViewTests(TestCase):
         The detail view of a question with a pub_date in the future
         returns a 404 not found.
         """
-        future_question = create_question(question_text='Future question.', start=5, end=10)
+        future_question = create_question(question_text='Future question.',
+                                          start=5, end=10)
         url = reverse('polls:detail', args=(future_question.id,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
@@ -155,7 +165,8 @@ class QuestionDetailViewTests(TestCase):
         The detail view of a question with a pub_date in the past
         displays the question's text.
         """
-        past_question = create_question(question_text='Past Question.', start=-5, end=10)
+        past_question = create_question(question_text='Past Question.',
+                                        start=-5, end=10)
         url = reverse('polls:detail', args=(past_question.id,))
         response = self.client.get(url)
         self.assertContains(response, past_question.question_text)
@@ -187,4 +198,3 @@ class VoteModelTest(TestCase):
         vote_url = reverse('polls:vote', args=[self.question.id])
         response = self.client.get(vote_url)
         self.assertEqual(response.status_code, 200)
-
