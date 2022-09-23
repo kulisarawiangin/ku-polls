@@ -31,12 +31,15 @@ install python in your computer
  ``` 
   pip install -r requirements.txt
  ```
- 
+ you can deactivate env by type this command
+ ``` 
+  deactivate
+ ```
  6. Create file name .env to configuration as sample.env in git repository
  7. migrate data and load it
  ``` 
  python manage.py migrate
- python manage.py loaddate data/*.json
+ python manage.py loaddata data/*.json
  ```
  6. run server by type this command in your terminal.
  ``` 
