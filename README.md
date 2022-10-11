@@ -18,19 +18,34 @@ install python in your computer
   ``` 
   cd ku-polls
   ```
-3. install requirement by run this command
+3. create environment
+``` 
+  python -m venv env
+ ```
+ 4. activate env
+ ``` 
+  . env/bin/activate  
+ ```
+5. install requirement by run this command
 
  ``` 
   pip install -r requirements.txt
  ```
- 
- 4. Create file name .env to configuration as .env in git repository
- 
- 5. run server by type this command in your terminal.
+ you can deactivate env by type this command
+ ``` 
+  deactivate
+ ```
+ 6. Create file name .env to configuration as sample.env in git repository
+ 7. migrate data and load it
+ ``` 
+ python manage.py migrate
+ python manage.py loaddata data/*.json
+ ```
+ 6. run server by type this command in your terminal.
  ``` 
  python manage.py runserver
  ```
- 6. You can use website at 
+ 7. You can use website at 
  ``` 
  localhost:8000/ or http://127.0.0.1:8000/
  ``` 
@@ -58,4 +73,4 @@ All project documents are in the [Project Wiki](../../wiki/Home)
 * [Iteration 1 Plan](../../wiki/Iteration-1-Plan) and [Task Board](https://github.com/users/kulisarawiangin/projects/2/views/2)
 * [Iteration 2 Plan](../../wiki/Iteration-2-Plan) and [Task Bord](https://github.com/users/kulisarawiangin/projects/4/views/2)
 * [Iteration 3 Plan](../../wiki/Iteration-3-Plan) and [Task Bord](https://github.com/users/kulisarawiangin/projects/5/views/2?layout=board)
-
+* [Iteration 4 Plan](../../wiki/Iteration-4-Plan) and [Task Bord](https://github.com/users/kulisarawiangin/projects/6/views/2?layout=board)
