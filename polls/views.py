@@ -1,3 +1,4 @@
+
 """This module contains the view of site page of the KU Polls application."""
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
