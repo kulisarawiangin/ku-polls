@@ -1,7 +1,5 @@
 # ku-polls
-![GitHub CI](https://github.com/kulisarawiangin/ku-polls/actions/workflows/python-app.yml/badge.svg)
-
-[![codecov](https://codecov.io/gh/kulisarawiangin/ku-polls/coverage.svg?branch=master)](https://app.codecov.io/github/kulisarawiangin/ku-polls/tree/master/polls)
+![GitHub CI](https://github.com/kulisarawiangin/ku-polls/actions/workflows/python-app.yml/badge.svg) [![codecov](https://codecov.io/gh/kulisarawiangin/ku-polls/coverage.svg?branch=master)](https://app.codecov.io/github/kulisarawiangin/ku-polls/tree/master/polls)
 
 
 Web application for polls and surveys at Kasetsart University
